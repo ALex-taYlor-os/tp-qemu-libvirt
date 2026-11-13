@@ -94,6 +94,13 @@ virsh net-list --all
  default   active   yes         yes
 ````
 
+Sinon faire : 
+
+````
+virsh net-start default
+virsh net-autostart default
+````
+
 #### 2.2.2 Stockage
 ````
 virsh pool-list --all
@@ -145,7 +152,7 @@ On télécharge d'abord notre iso dans le dossier libvirt/image
 
 ````
 cd /var/lib/libvirt/images
-sudo wget https://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-qemu-amd64.7z
+sudo wget https://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64.iso
 ````
 
 On doit localiser où se trouve initrd et le kernel pour le boot :
@@ -158,10 +165,10 @@ Puis on lance l'installation avec les paramètres qui suit (installation sans in
 
 ````
 virt-install \
-  --name kali-vm2 \
+  --name kali-vm \
   --memory 3072 \
   --vcpus 2 \
-  --disk /var/lib/libvirt/images/kali-linux-2026.3-installer-amd64.iso,device=disk,bus=virtio,size=8,pool=default2 \
+  --disk /var/lib/libvirt/images/kali-linux-2026.3-installer-amd64.iso,device=disk,bus=virtio,size=8,pool=default \
   --network network=default \
   --location /var/lib/libvirt/images/kali-linux-2026.3-installer-amd64.iso,initrd=install.amd/initrd.gz,kernel=install.amd/vmlinuz \
   --os-type Linux \
@@ -172,7 +179,7 @@ virt-install \
   --debug 
 
 ````
-
+Si problème avec le démarrage pendant le boot de GRUB. 
 
 ### 3 Commandes pratiques avec virsh 
 
@@ -207,3 +214,6 @@ virsh undefine MaVM
 ## Ressources 
 
 Autoriser sur windows la virtualisation (https://stackoverflow.com/questions/70418275/vmware-workstation-unrecoverable-error-vcpu-0)
+
+Autoriser à lancer Kali linux sur ma vm 
+https://unix.stackexchange.com/questions/203768/debian-8-kvm-guest-loading-initial-ramdisk
