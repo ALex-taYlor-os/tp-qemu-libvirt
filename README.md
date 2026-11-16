@@ -351,6 +351,10 @@ sudo systemctl stop cockpit cockpit.socket
 sudo systemctl start cockpit cockpit.socket
 ````
 
+Enfin se connecter depuis la machine hôte à l'adresse 
+> https://IP_de_Ma_VM:9191
+
+
 >D'abord fermer les vm de virt-manager et se connecter sur cockpit pour voir les VMs !!
 
 
