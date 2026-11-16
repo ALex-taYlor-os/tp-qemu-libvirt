@@ -158,7 +158,10 @@ sudo wget https://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64
 On doit localiser où se trouve initrd et le kernel pour le boot :
 
 ````
-isoinfo -J -i <ISO image> -l | grep -e '(initrd|vmlinuz)'
+apt install genisoimage
+````
+````
+isoinfo -J -i kali-linux-2026.3-installer-amd64.iso -l | grep -e '(initrd|vmlinuz)'
 ````
 
 Puis on lance l'installation avec les paramètres qui suit (installation sans interface) graphique  
@@ -180,6 +183,13 @@ virt-install \
 
 ````
 Si problème avec le démarrage pendant le boot de GRUB. 
+
+On va faire ensorte d'avoir le terminal sur la sortie  console
+1) Au menu démarrage de kali linux, appuyer sur 'e'.
+2) Ensuite se deplacer à la ligne linux /vmlinuz....
+3) Pour se déplacer, Ctrl+n(ligne suivante) ou Ctrl+p(ligne précédente), Ctrl+f (caractère suivant)
+4) Ajouter 'console=ttyS0' après le 'quiet'
+5) Sur la vm hôte, mettre 'systemctl enable getty@ttyS0' pour ne pas à refaire toute la manipulation.
 
 ### 3 Commandes pratiques avec virsh 
 
