@@ -325,6 +325,265 @@ Dans les options du processeur :  i440FX et BIOS
 ````
 Lancer Metasploitable
 
+
+## Snapshot
+
+Lister, créer et lister les snapshot d'une vm
+````
+virsh domstate linux2024
+
+virsh snapshot-create-as linux2024 --name "before_attack" --description "Etat avant l'utilisation d'une faille avec kali-linux"
+
+virsh snapshot-list linux2024
+````
+
+faire un dump au format xml d'un snapsot
+````
+virsh snapshot-dumpxml linux2024 --snapshotname before_attack
+````
+````
+<domainsnapshot>
+  <name>before_attack</name>
+  <description>Etat avant l&apos;utilisation d&apos;une faille avec kali-linux</description>
+  <state>running</state>
+  <creationTime>1794870655</creationTime>
+  <memory snapshot='internal'/>
+  <disks>
+    <disk name='sda' snapshot='internal'/>
+  </disks>
+  <domain type='kvm'>
+    <name>linux2024</name>
+    <uuid>856cfc8c-01a5-4e8d-ae44-71da3f2c8cf1</uuid>
+    <metadata>
+      <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+        <libosinfo:os id="http://libosinfo.org/linux/2024"/>
+      </libosinfo:libosinfo>
+    </metadata>
+    <memory unit='KiB'>1048576</memory>
+    <currentMemory unit='KiB'>1048576</currentMemory>
+    <vcpu placement='static'>2</vcpu>
+    <resource>
+      <partition>/machine</partition>
+    </resource>
+    <os>
+      <type arch='x86_64' machine='pc-i440fx-10.0'>hvm</type>
+      <bootmenu enable='no'/>
+    </os>
+    <features>
+      <acpi/>
+      <apic/>
+      <vmport state='off'/>
+    </features>
+    <cpu mode='host-passthrough' check='none' migratable='on'/>
+    <clock offset='utc'>
+      <timer name='rtc' tickpolicy='catchup'/>
+      <timer name='pit' tickpolicy='delay'/>
+      <timer name='hpet' present='no'/>
+    </clock>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <pm>
+      <suspend-to-mem enabled='no'/>
+      <suspend-to-disk enabled='no'/>
+    </pm>
+    <devices>
+      <emulator>/usr/bin/qemu-system-x86_64</emulator>
+      <disk type='file' device='disk'>
+        <driver name='qemu' type='qcow2'/>
+        <source file='/var/lib/libvirt/images/Metasploitable2-Linux/metasploitable.qcow2'/>
+        <target dev='sda' bus='sata'/>
+        <boot order='1'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='usb' index='0' model='qemu-xhci' ports='15'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+      </controller>
+      <controller type='sata' index='0'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+      </controller>
+      <controller type='virtio-serial' index='0'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+      </controller>
+      <controller type='pci' index='0' model='pci-root'/>
+      <interface type='network'>
+        <mac address='52:54:00:2f:61:a3'/>
+        <source network='labisolated'/>
+        <model type='e1000'/>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      </interface>
+      <serial type='pty'>
+        <target type='isa-serial' port='0'>
+          <model name='isa-serial'/>
+        </target>
+      </serial>
+      <console type='pty'>
+        <target type='serial' port='0'/>
+      </console>
+      <channel type='unix'>
+        <target type='virtio' name='org.qemu.guest_agent.0'/>
+        <address type='virtio-serial' controller='0' bus='0' port='1'/>
+      </channel>
+      <channel type='spicevmc'>
+        <target type='virtio' name='com.redhat.spice.0'/>
+        <address type='virtio-serial' controller='0' bus='0' port='2'/>
+      </channel>
+      <input type='tablet' bus='usb'>
+        <address type='usb' bus='0' port='1'/>
+      </input>
+      <input type='mouse' bus='ps2'/>
+      <input type='keyboard' bus='ps2'/>
+      <graphics type='spice' autoport='yes'>
+        <listen type='address'/>
+        <image compression='off'/>
+      </graphics>
+      <sound model='ich9'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+      </sound>
+      <audio id='1' type='spice'/>
+      <video>
+        <model type='virtio' heads='1' primary='yes'/>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+      </video>
+      <redirdev bus='usb' type='spicevmc'>
+        <address type='usb' bus='0' port='2'/>
+      </redirdev>
+      <redirdev bus='usb' type='spicevmc'>
+        <address type='usb' bus='0' port='3'/>
+      </redirdev>
+      <memballoon model='virtio'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+      </memballoon>
+      <rng model='virtio'>
+        <backend model='random'>/dev/urandom</backend>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x09' function='0x0'/>
+      </rng>
+    </devices>
+    <seclabel type='dynamic' model='apparmor' relabel='yes'/>
+  </domain>
+  <inactiveDomain type='kvm'>
+    <name>linux2024</name>
+    <uuid>856cfc8c-01a5-4e8d-ae44-71da3f2c8cf1</uuid>
+    <metadata>
+      <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+        <libosinfo:os id="http://libosinfo.org/linux/2024"/>
+      </libosinfo:libosinfo>
+    </metadata>
+    <memory unit='KiB'>1048576</memory>
+    <currentMemory unit='KiB'>1048576</currentMemory>
+    <vcpu placement='static'>2</vcpu>
+    <os>
+      <type arch='x86_64' machine='pc-i440fx-10.0'>hvm</type>
+      <bootmenu enable='no'/>
+    </os>
+    <features>
+      <acpi/>
+      <apic/>
+      <vmport state='off'/>
+    </features>
+    <cpu mode='host-passthrough' check='none' migratable='on'/>
+    <clock offset='utc'>
+      <timer name='rtc' tickpolicy='catchup'/>
+      <timer name='pit' tickpolicy='delay'/>
+      <timer name='hpet' present='no'/>
+    </clock>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <pm>
+      <suspend-to-mem enabled='no'/>
+      <suspend-to-disk enabled='no'/>
+    </pm>
+    <devices>
+      <emulator>/usr/bin/qemu-system-x86_64</emulator>
+      <disk type='file' device='disk'>
+        <driver name='qemu' type='qcow2'/>
+        <source file='/var/lib/libvirt/images/Metasploitable2-Linux/metasploitable.qcow2'/>
+        <target dev='sda' bus='sata'/>
+        <boot order='1'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='usb' index='0' model='qemu-xhci' ports='15'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+      </controller>
+      <controller type='pci' index='0' model='pci-root'/>
+      <controller type='sata' index='0'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+      </controller>
+      <controller type='virtio-serial' index='0'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+      </controller>
+      <interface type='network'>
+        <mac address='52:54:00:2f:61:a3'/>
+        <source network='labisolated'/>
+        <model type='e1000'/>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      </interface>
+      <serial type='pty'>
+        <target type='isa-serial' port='0'>
+          <model name='isa-serial'/>
+        </target>
+      </serial>
+      <console type='pty'>
+        <target type='serial' port='0'/>
+      </console>
+      <channel type='unix'>
+        <target type='virtio' name='org.qemu.guest_agent.0'/>
+        <address type='virtio-serial' controller='0' bus='0' port='1'/>
+      </channel>
+      <channel type='spicevmc'>
+        <target type='virtio' name='com.redhat.spice.0'/>
+        <address type='virtio-serial' controller='0' bus='0' port='2'/>
+      </channel>
+      <input type='tablet' bus='usb'>
+        <address type='usb' bus='0' port='1'/>
+      </input>
+      <input type='mouse' bus='ps2'/>
+      <input type='keyboard' bus='ps2'/>
+      <graphics type='spice' autoport='yes'>
+        <listen type='address'/>
+        <image compression='off'/>
+      </graphics>
+      <sound model='ich9'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+      </sound>
+      <audio id='1' type='spice'/>
+      <video>
+        <model type='virtio' heads='1' primary='yes'/>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+      </video>
+      <redirdev bus='usb' type='spicevmc'>
+        <address type='usb' bus='0' port='2'/>
+      </redirdev>
+      <redirdev bus='usb' type='spicevmc'>
+        <address type='usb' bus='0' port='3'/>
+      </redirdev>
+      <memballoon model='virtio'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+      </memballoon>
+      <rng model='virtio'>
+        <backend model='random'>/dev/urandom</backend>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x09' function='0x0'/>
+      </rng>
+    </devices>
+  </inactiveDomain>
+  <cookie>
+    <cpu mode='host-passthrough' check='none' migratable='on'/>
+    <slirpHelper/>
+  </cookie>
+</domainsnapshot>
+````
+````
+virsh snapshot-revert linux2024 --snapshotname before_attack
+````
+Le vrai coût d'une chaîne longue est ailleurs, et il est bien réel : l'espace que personne ne récupère, la complexité de savoir quelle couche porte quoi, et le risque de manipulation au moment de consolider. La règle de conduite ne change donc pas : créez un snapshot, testez, puis supprimez-le ou consolidez la chaîne. Elle se justifie par l'hygiène, pas par un seuil de performance.
+
+Pour importer une vm au format xml : 
+````
+virsh define /path/to/xmlfile.xml
+````
+>Bien faire attention à ce que le chemin source dans la balise disk, pointe bien vers une image qcow2 !
+
 ## Supervision avec Cockpit
 
 Installation de cockpit 
@@ -351,9 +610,8 @@ sudo systemctl stop cockpit cockpit.socket
 sudo systemctl start cockpit cockpit.socket
 ````
 
-Enfin se connecter depuis la machine hôte à l'adresse 
+Enfin se connecter depuis la machine hôte à l'adresse :
 > https://IP_de_Ma_VM:9191
-
 
 >D'abord fermer les vm de virt-manager et se connecter sur cockpit pour voir les VMs !!
 
