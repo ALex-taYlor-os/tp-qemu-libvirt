@@ -1,21 +1,36 @@
 # KVM - Metasploitable - Kali linux
 ## Sommaire
-1. [Objectifs et contexte](#1--mise-en-place-des-vm)
-2. [Etapes d'installation](#2-Preparation-des-environnements)
-3. [](#3-Industrialisation-et-supply-chain)
+1. [Mise en place des vm](#1--mise-en-place-des-vm)
+2. [Préparation des environnements](#2--Preparation-des-environnements)
+3. [Commandes avec virsh](#3--Commandes-pratiques-avec-virsh )
 
 
 ## 1.  Mise en place des vm
-### 1.1 Déploiment d'une Vm attaquante et d'une Vm cible.
+### 1.1 Concept fondamentaux.
+KVM : laisser les instructions de la machine virtuelle s'exécuter directement sur le processeur physique, Utilise les instructions CPU (Intel VT-x / AMD-V) pour exécuter les VMs à vitesse quasi-native, Chaque VM est isolée des autres grâce au matériel, Les instructions de la VM s'exécutent directement sur le CPU, Pas d'émulation coûteuse
 
+QEMU (Quick Emulator) : émulateur et virtualiseur. Crée réellement les machines virtuelles.
+Peut émuler différentes architectures (x86, ARM, etc.) Gère les périphériques : disques virtuels, cartes réseau, USB....
+
+>En pratique, on utilise presque toujours QEMU + KVM pour les VMs Linux/Windows sur serveur x86.
+
+libvirt : couche de gestion qui simplifie l'utilisation de QEMU/KVM (et d'autres hyperviseurs)
+API unifiée -> même interface pour KVM, QEMU, Xen, VirtualBox, VMware, Daemon : libvirtd tourne en arrière-plan et gère les VMs, Outils : virsh (CLI), virt-manager (GUI), virt-install (création) ,Stocke les définitions de VMs en XML
+````
+virsh	           CLI	Gestion en ligne de commande
+virt-manager	   GUI	Interface graphique desktop
+virt-install	   CLI	Création de VMs scriptable
+cockpit-machines   Web	Interface web (moderne)
+````
+### 1.2 Déploiment d'une Vm attaquante et d'une Vm cible.
 Contenant un serveur Web, un serveur ftp tout deux avec un certificat TLS. Ainsi que les serveurs DNS, DHCP qui auront pour domaine starfleet.lan, LDAP, MAriaDB, l'utilisation de PHP pour le serveur web avec ngnix
 
 ## Plan 
 
 - Installation de qemu,KVM
 - Preparation des images de metasploitable et kali linux
-- Mettre tout ça dans cloud init (checker les paramètres à configurer)
-- Trouver une faille à exploiter (scanner la machine avant l'attaque (snapshot))
+- Utilisation de cloud init
+- Trouver une faille à exploiter 
 - Intégration depuis le web (cockpit)
 
 ## 2. Preparation des environnements
@@ -33,7 +48,8 @@ Ensuite installation de qemu
 
 ````
 sudo apt update && sudo apt upgrade -y
-
+````
+````
 sudo apt install -y \
   qemu-system-x86 \
   libvirt-daemon-system \
@@ -42,13 +58,14 @@ sudo apt install -y \
   virt-manager
 ````
 
+````
 Paquet	                Rôle
 qemu-system-x86:    	Émulateur QEMU pour x86, avec accélération KVM
 libvirt-daemon-system:	Daemon libvirtd + configuration système
 libvirt-clients: 	    Outils CLI (virsh)
 virtinst :	            Outil virt-install pour créer des VMs
 virt-manager :	        Interface graphique (optionnel sur serveur)
-
+````
 Activation du service libvirt 
 ````
 sudo systemctl enable --now libvirtd
