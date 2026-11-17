@@ -322,7 +322,7 @@ dans /var/lib/libvirt/images :
 wget https://downloads.metasploit.com/data/metasploitable/metasploitable-linux-2.0.0.zip
 
 unzip metasploitable-linux-2.0.0.zip
-
+cd Metasploitable2-Linux
 #Convertir l'image vmdk en qcow2 pour une meilleure installation 
 qemu-img convert -O qcow2 Metasploitable.vmdk metasploitable.qcow2
 ````
