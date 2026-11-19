@@ -1,12 +1,16 @@
 # KVM - Metasploitable - Kali linux
 ## Sommaire
 1. [Mise en place des vm](#1--mise-en-place-des-vm)
-2. [Préparation des environnements](#2--Preparation-des-environnements)
-3. [Commandes avec virsh](#3--Commandes-pratiques-avec-virsh )
+2. [Preparation des environnements](#2-preparation-des-environnements)
+3. [Commandes avec virsh](#3-commandes-pratiques-avec-virsh)
+4. [Cloud init](#4-cloud-init)
+5. [Installation de metasploitable 2](#5-installation-metasploitable-2)
+6. [Mise en place des vm](#2-preparation-des-environnements)
+
 
 
 ## 1.  Mise en place des vm
-### 1.1 Concept fondamentaux.
+### 1.1 Concept fondamentaux
 KVM : laisser les instructions de la machine virtuelle s'exécuter directement sur le processeur physique, Utilise les instructions CPU (Intel VT-x / AMD-V) pour exécuter les VMs à vitesse quasi-native, Chaque VM est isolée des autres grâce au matériel, Les instructions de la VM s'exécutent directement sur le CPU, Pas d'émulation coûteuse
 
 QEMU (Quick Emulator) : émulateur et virtualiseur. Crée réellement les machines virtuelles.
@@ -22,10 +26,10 @@ virt-manager	   GUI	Interface graphique desktop
 virt-install	   CLI	Création de VMs scriptable
 cockpit-machines   Web	Interface web (moderne)
 ````
-### 1.2 Déploiment d'une Vm attaquante et d'une Vm cible.
+### 1.2 Déploiment d'une Vm attaquante et d'une Vm cible
 Contenant un serveur Web, un serveur ftp tout deux avec un certificat TLS. Ainsi que les serveurs DNS, DHCP qui auront pour domaine starfleet.lan, LDAP, MAriaDB, l'utilisation de PHP pour le serveur web avec ngnix
 
-## Plan 
+### 1.3 Plan 
 
 - Installation de qemu,KVM
 - Preparation des images de metasploitable et kali linux
@@ -224,7 +228,7 @@ virt-install \
   --graphics vnc,listen=127.0.0.1 \
   --noautoconsole
 ````
-### 3 Commandes pratiques avec virsh 
+## 3. Commandes pratiques avec virsh 
 
 Lister les vm présentes
 ````
@@ -250,7 +254,7 @@ virsh undefine MaVM
 ````
 
 
-## CLoud-init
+## 4. Cloud-init
 ````
 sudo apt install -y cloud-init cloud-utils
 ````
@@ -313,9 +317,8 @@ virt-install \
   --noautoconsole
 ````
 Attention : CLoud-init ne fonctionne pas avec Metasploitable 2
-## 3. Industrialisation et supply chain
 
-## Installation Metasploitable 2
+## 5. Installation Metasploitable 2
 
 dans /var/lib/libvirt/images :
 ````
